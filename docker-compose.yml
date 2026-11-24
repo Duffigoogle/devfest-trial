@@ -1,0 +1,134 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: cloudmart-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_root_local
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/local/init-multiple-dbs.sql:/docker-entrypoint-initdb.d/01-init-multiple-dbs.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  pubsub-emulator:
+    image: gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators
+    container_name: cloudmart-pubsub-emulator
+    command: gcloud beta emulators pubsub start --project=cloudmart-local --host-port=0.0.0.0:8085
+    ports:
+      - "8085:8085"
+
+  product-service:
+    build:
+      context: .
+      dockerfile: apps/product-service/Dockerfile
+    environment:
+      PORT: "3001"
+      GRPC_URL: "0.0.0.0:50051"
+      DATABASE_URL: "postgresql://svc_product:product_secret_local@postgres:5432/product_db?schema=public"
+      GCP_PROJECT_ID: "cloudmart-local"
+      PUBSUB_EMULATOR_HOST: "pubsub-emulator:8085"
+    ports:
+      - "3001:3001"
+      - "50051:50051"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      pubsub-emulator:
+        condition: service_started
+
+  cart-service:
+    build:
+      context: .
+      dockerfile: apps/cart-service/Dockerfile
+    environment:
+      PORT: "3002"
+      GRPC_URL: "0.0.0.0:50052"
+      PRODUCT_GRPC_URL: "product-service:50051"
+      DATABASE_URL: "postgresql://svc_cart:cart_secret_local@postgres:5432/cart_db?schema=public"
+      GCP_PROJECT_ID: "cloudmart-local"
+      PUBSUB_EMULATOR_HOST: "pubsub-emulator:8085"
+    ports:
+      - "3002:3002"
+      - "50052:50052"
+    depends_on:
+      product-service:
+        condition: service_started
+
+  order-service:
+    build:
+      context: .
+      dockerfile: apps/order-service/Dockerfile
+    environment:
+      PORT: "3003"
+      CART_GRPC_URL: "cart-service:50052"
+      DATABASE_URL: "postgresql://svc_order:order_secret_local@postgres:5432/order_db?schema=public"
+      GCP_PROJECT_ID: "cloudmart-local"
+      PUBSUB_EMULATOR_HOST: "pubsub-emulator:8085"
+    ports:
+      - "3003:3003"
+    depends_on:
+      cart-service:
+        condition: service_started
+
+  payment-service:
+    build:
+      context: .
+      dockerfile: apps/payment-service/Dockerfile
+    environment:
+      PORT: "3004"
+      DATABASE_URL: "postgresql://svc_payment:payment_secret_local@postgres:5432/payment_db?schema=public"
+      GCP_PROJECT_ID: "cloudmart-local"
+      PUBSUB_EMULATOR_HOST: "pubsub-emulator:8085"
+      PAYMENT_WEBHOOK_SECRET: "whsec_local_dev_secret"
+    ports:
+      - "3004:3004"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      pubsub-emulator:
+        condition: service_started
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: apps/notification-service/Dockerfile
+    environment:
+      PORT: "3005"
+      DATABASE_URL: "postgresql://svc_notification:notification_secret_local@postgres:5432/notification_db?schema=public"
+      GCP_PROJECT_ID: "cloudmart-local"
+      PUBSUB_EMULATOR_HOST: "pubsub-emulator:8085"
+    ports:
+      - "3005:3005"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      pubsub-emulator:
+        condition: service_started
+
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+    environment:
+      PORT: "3000"
+      NEXT_PUBLIC_PRODUCT_API_URL: "http://localhost:3001/api/v1"
+      NEXT_PUBLIC_CART_API_URL: "http://localhost:3002/api/v1"
+      NEXT_PUBLIC_ORDER_API_URL: "http://localhost:3003/api/v1"
+      NEXT_PUBLIC_PAYMENT_API_URL: "http://localhost:3004/api/v1"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - product-service
+      - cart-service
+      - order-service
+      - payment-service
+
+volumes:
+  postgres_data:

@@ -1,0 +1,47 @@
+// Notification Service Isolated PostgreSQL Schema (notification_db)
+// Connected via dedicated role: svc_notification
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model NotificationTemplate {
+  key         String   @id
+  channel     String   // EMAIL | SMS | PUSH
+  subject     String
+  bodyHtml    String   @map("body_html")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("notification_templates")
+}
+
+model NotificationLog {
+  id              String   @id @default(uuid()) @db.Uuid
+  sourceEventId   String   @unique @map("source_event_id")
+  orderId         String   @map("order_id") @db.Uuid
+  recipientUserId String   @map("recipient_user_id") @db.Uuid
+  recipientEmail  String   @map("recipient_email")
+  channel         String   // EMAIL | SMS
+  templateKey     String   @map("template_key")
+  subject         String
+  status          String   // SENT | FAILED_RETRYING
+  correlationId   String   @map("correlation_id")
+  sentAt          DateTime @default(now()) @map("sent_at")
+
+  @@index([orderId])
+  @@index([recipientUserId])
+  @@map("notification_logs")
+}
+
+model ProcessedEvent {
+  eventId     String   @id @map("event_id")
+  eventType   String   @map("event_type")
+  processedAt DateTime @default(now()) @map("processed_at")
+
+  @@map("processed_events")
+}

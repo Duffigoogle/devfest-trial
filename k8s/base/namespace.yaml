@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cloudmart
+  labels:
+    app.kubernetes.io/part-of: cloudmart
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ksa-product-service
+  namespace: cloudmart
+  annotations:
+    iam.gke.io/gcp-service-account: gsa-product-service@PROJECT_ID.iam.gserviceaccount.com
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ksa-cart-service
+  namespace: cloudmart
+  annotations:
+    iam.gke.io/gcp-service-account: gsa-cart-service@PROJECT_ID.iam.gserviceaccount.com
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ksa-order-service
+  namespace: cloudmart
+  annotations:
+    iam.gke.io/gcp-service-account: gsa-order-service@PROJECT_ID.iam.gserviceaccount.com
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ksa-payment-service
+  namespace: cloudmart
+  annotations:
+    iam.gke.io/gcp-service-account: gsa-payment-service@PROJECT_ID.iam.gserviceaccount.com
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ksa-notification-service
+  namespace: cloudmart
+  annotations:
+    iam.gke.io/gcp-service-account: gsa-notification-service@PROJECT_ID.iam.gserviceaccount.com

@@ -1,0 +1,80 @@
+// Order Service Isolated PostgreSQL Schema (order_db)
+// Connected via dedicated role: svc_order
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Order {
+  id                  String          @id @default(uuid()) @db.Uuid
+  userId              String          @map("user_id") @db.Uuid
+  cartId              String          @map("cart_id")
+  idempotencyKey      String          @unique @map("idempotency_key")
+  customerEmail       String          @map("customer_email")
+  shippingAddressJson Json            @map("shipping_address_json")
+  status              String          // PENDING_INVENTORY | AWAITING_PAYMENT | CONFIRMED | CANCELLED_OUT_OF_STOCK | PAYMENT_FAILED
+  totalCents          Int             @map("total_cents")
+  currency            String          @default("USD")
+  paymentClientSecret String?         @map("payment_client_secret")
+  items               OrderItem[]
+  sagaState           OrderSagaState?
+  createdAt           DateTime        @default(now()) @map("created_at")
+  updatedAt           DateTime        @updatedAt @map("updated_at")
+
+  @@index([userId, createdAt])
+  @@index([status])
+  @@map("orders")
+}
+
+model OrderItem {
+  id                  String @id @default(uuid()) @db.Uuid
+  orderId             String @map("order_id") @db.Uuid
+  order               Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId           String @map("product_id") @db.Uuid
+  skuSnapshot         String @map("sku_snapshot")
+  productNameSnapshot String @map("product_name_snapshot")
+  unitPriceCents      Int    @map("unit_price_cents")
+  quantity            Int
+
+  @@map("order_items")
+}
+
+model OrderSagaState {
+  orderId             String   @id @map("order_id") @db.Uuid
+  order               Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  currentStep         String   @map("current_step")
+  inventoryReserved   Boolean  @default(false) @map("inventory_reserved")
+  paymentIntentReady  Boolean  @default(false) @map("payment_intent_ready")
+  paymentSucceeded    Boolean  @default(false) @map("payment_succeeded")
+  compensationReason  String?  @map("compensation_reason")
+  historyJson         Json     @map("history_json")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  @@map("order_saga_state")
+}
+
+model OutboxEvent {
+  id            String    @id @default(uuid()) @db.Uuid
+  topic         String
+  eventType     String    @map("event_type")
+  correlationId String    @map("correlation_id")
+  payload       Json
+  publishedAt   DateTime? @map("published_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  @@index([publishedAt, createdAt])
+  @@map("outbox_events")
+}
+
+model ProcessedEvent {
+  eventId     String   @id @map("event_id")
+  eventType   String   @map("event_type")
+  processedAt DateTime @default(now()) @map("processed_at")
+
+  @@map("processed_events")
+}
