@@ -19,11 +19,11 @@ describe('Product Service API', () => {
   });
 
   describe('GET /products', () => {
-    it('returns all 8 products from the JSON catalogue with id, name, price in naira, imageUrl, and stock', async () => {
+    it('returns all products from the JSON catalogue with id, name, price in naira, imageUrl, and stock', async () => {
       const res = await request(app).get('/products');
       expect(res.status).toBe(200);
       expect(Array.isArray(res.body)).toBe(true);
-      expect(res.body).toHaveLength(8);
+      expect(res.body).toHaveLength(rawProducts.length);
       expect(res.body).toEqual(rawProducts);
 
       for (const product of res.body) {
@@ -45,13 +45,7 @@ describe('Product Service API', () => {
     it('returns a single product by ID when found', async () => {
       const res = await request(app).get('/products/prod-1');
       expect(res.status).toBe(200);
-      expect(res.body).toEqual({
-        id: 'prod-1',
-        name: 'Cloud Run Developer Hoodie',
-        price: 35000,
-        imageUrl: '/images/cloud-run-hoodie.jpg',
-        stock: 25
-      });
+      expect(res.body).toEqual(rawProducts[0]);
     });
 
     it('returns 404 when the product ID does not exist', async () => {

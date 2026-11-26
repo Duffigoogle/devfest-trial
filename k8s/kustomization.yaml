@@ -11,6 +11,16 @@ resources:
   - order.yaml
   - frontend.yaml
 
+# Centralize GCP Project ID and Pub/Sub topic configuration in one place
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: cloudmart-config
+    literals:
+      - GOOGLE_CLOUD_PROJECT=PROJECT_ID
+      - PUBSUB_TOPIC=order.placed
+
 # Set your Artifact Registry / Container Registry path and image tag in one place:
 # e.g. replace "REGION-docker.pkg.dev/PROJECT_ID/cloudmart" and "v1.0.0"
 images:

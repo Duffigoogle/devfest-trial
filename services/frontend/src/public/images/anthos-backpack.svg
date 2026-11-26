@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260">
+  <defs>
+    <linearGradient id="bg8" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffedd5"/>
+      <stop offset="100%" stop-color="#fdba74"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="260" fill="url(#bg8)"/>
+  <!-- Top Carry Loop -->
+  <path d="M178 48 C178 24 222 24 222 48" fill="none" stroke="#1e293b" stroke-width="6" stroke-linecap="round"/>
+  <!-- Side Pockets -->
+  <rect x="118" y="135" width="18" height="65" rx="6" fill="#334155" stroke="#0f172a" stroke-width="3"/>
+  <rect x="264" y="135" width="18" height="65" rx="6" fill="#334155" stroke="#0f172a" stroke-width="3"/>
+  <!-- Main Pack Body -->
+  <path d="M132 95 C132 50 268 50 268 95 L268 212 C268 220 260 225 250 225 L150 225 C140 225 132 220 132 212 Z" fill="#0f172a" stroke="#1e293b" stroke-width="4"/>
+  <!-- Front Zipper Pocket -->
+  <rect x="148" y="135" width="104" height="72" rx="12" fill="#1e293b" stroke="#475569" stroke-width="3"/>
+  <line x1="156" y1="152" x2="244" y2="152" stroke="#fbbc04" stroke-width="3"/>
+  <!-- Anthos Multi-Cloud Badge -->
+  <polygon points="200,82 220,115 180,115" fill="#ea4335"/>
+  <polygon points="200,92 212,112 188,112" fill="#fbbc04"/>
+</svg>

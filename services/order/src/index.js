@@ -32,11 +32,16 @@ app.get('/orders/:id', (req, res) => {
 });
 
 app.post('/orders', async (req, res) => {
-  const { cartId, customerEmail } = req.body || {};
+  const { cartId, customerEmail, shippingCost } = req.body || {};
 
   if (!cartId || typeof cartId !== 'string' || !customerEmail || typeof customerEmail !== 'string') {
     return res.status(400).json({ error: 'cartId and customerEmail are required' });
   }
+
+  const shipping =
+    typeof shippingCost === 'number' && !Number.isNaN(shippingCost) && shippingCost >= 0
+      ? shippingCost
+      : 0;
 
   try {
     // 1. Read cart from CART_URL
@@ -72,7 +77,8 @@ app.post('/orders', async (req, res) => {
       });
     }
 
-    const total = pricedItems.reduce((sum, i) => sum + i.price * i.quantity, 0);
+    const itemsTotal = pricedItems.reduce((sum, i) => sum + i.price * i.quantity, 0);
+    const total = itemsTotal + shipping;
     const orderId = `ord-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
 
     // 3. Charge the total through PAYMENT_URL

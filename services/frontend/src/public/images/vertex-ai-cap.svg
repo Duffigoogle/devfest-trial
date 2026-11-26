@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260">
+  <defs>
+    <linearGradient id="bg5" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f3e8ff"/>
+      <stop offset="100%" stop-color="#d8b4fe"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="260" fill="url(#bg5)"/>
+  <!-- Cap Crown -->
+  <path d="M110 155 C110 75 265 75 265 155 Z" fill="#6b21a8" stroke="#3b0764" stroke-width="4"/>
+  <!-- Cap Panel Seam -->
+  <path d="M188 85 C165 110 162 135 160 155" fill="none" stroke="#3b0764" stroke-width="3"/>
+  <path d="M188 85 C210 110 214 135 216 155" fill="none" stroke="#3b0764" stroke-width="3"/>
+  <!-- Top Button -->
+  <ellipse cx="188" cy="83" rx="8" ry="4" fill="#fbbc04" stroke="#3b0764" stroke-width="2.5"/>
+  <!-- Flat Visor / Brim -->
+  <path d="M105 155 L315 155 C325 168 300 176 260 176 L110 165 Z" fill="#3b0764" stroke="#1e1b4b" stroke-width="3.5"/>
+  <!-- Vertex AI Node Icon on Front -->
+  <polygon points="188,108 206,138 170,138" fill="none" stroke="#fbbc04" stroke-width="3"/>
+  <circle cx="188" cy="108" r="5" fill="#38bdf8"/>
+  <circle cx="206" cy="138" r="5" fill="#38bdf8"/>
+  <circle cx="170" cy="138" r="5" fill="#38bdf8"/>
+</svg>

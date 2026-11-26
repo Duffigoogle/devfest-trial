@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e8f0fe"/>
+      <stop offset="100%" stop-color="#c2dbff"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="260" fill="url(#bg1)"/>
+  <circle cx="330" cy="50" r="70" fill="#1a73e8" opacity="0.08"/>
+  <circle cx="60" cy="220" r="85" fill="#1a73e8" opacity="0.08"/>
+  <!-- Hoodie Illustration -->
+  <path d="M145 65 L170 50 C185 62 215 62 230 50 L255 65 L305 110 L280 140 L255 115 L255 210 L145 210 L145 115 L120 140 L95 110 Z" fill="#1a73e8" stroke="#0d47a1" stroke-width="4" stroke-linejoin="round"/>
+  <!-- Hood -->
+  <path d="M162 54 C162 25 238 25 238 54 C222 68 178 68 162 54 Z" fill="#1557b0" stroke="#0d47a1" stroke-width="4"/>
+  <!-- Drawstrings -->
+  <line x1="188" y1="64" x2="188" y2="100" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="212" y1="64" x2="212" y2="100" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  <!-- Kangaroo Pocket -->
+  <path d="M162 165 L238 165 L248 198 L152 198 Z" fill="#1557b0" stroke="#0d47a1" stroke-width="3"/>
+  <!-- Cloud Run Logo on Chest -->
+  <polygon points="188,112 222,126 188,140 196,126" fill="#fbbc04"/>
+  <polygon points="178,116 194,126 178,136 183,126" fill="#ffffff"/>
+</svg>

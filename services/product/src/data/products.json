@@ -3,56 +3,96 @@
     "id": "prod-1",
     "name": "Cloud Run Developer Hoodie",
     "price": 35000,
-    "imageUrl": "/images/cloud-run-hoodie.jpg",
-    "stock": 25
+    "imageUrl": "/images/cloud-run-hoodie.svg",
+    "stock": 25,
+    "description": "This lightweight, ultra-soft developer hoodie delivers serverless comfort and auto-scaling warmth for late-night deployments."
   },
   {
     "id": "prod-2",
     "name": "GKE Kubernetes Captain Mug",
     "price": 12500,
-    "imageUrl": "/images/gke-mug.jpg",
-    "stock": 40
+    "imageUrl": "/images/gke-mug.svg",
+    "stock": 40,
+    "description": "Double-walled ceramic mug engineered to keep your coffee hot across rolling cluster upgrades and node pool autoscaling."
   },
   {
     "id": "prod-3",
     "name": "BigQuery Mechanical Keyboard",
     "price": 95000,
-    "imageUrl": "/images/bigquery-keyboard.jpg",
-    "stock": 15
+    "imageUrl": "/images/bigquery-keyboard.svg",
+    "stock": 15,
+    "description": "Hot-swappable tactile mechanical keyboard with custom Google Cloud accent keycaps, tuned for petabyte-scale SQL queries."
   },
   {
     "id": "prod-4",
     "name": "Spanner Global Sticker Pack",
     "price": 4500,
-    "imageUrl": "/images/spanner-stickers.jpg",
-    "stock": 100
+    "imageUrl": "/images/spanner-stickers.svg",
+    "stock": 100,
+    "description": "Die-cut weatherproof vinyl stickers featuring Cloud Run, Spanner, and GKE badges with external consistency guaranteed."
   },
   {
     "id": "prod-5",
     "name": "Vertex AI Snapback Cap",
     "price": 18000,
-    "imageUrl": "/images/vertex-ai-cap.jpg",
-    "stock": 30
+    "imageUrl": "/images/vertex-ai-cap.svg",
+    "stock": 30,
+    "description": "Structured six-panel snapback cap with an embroidered Vertex AI neural graph emblem and breathable mesh backing."
   },
   {
     "id": "prod-6",
     "name": "Cloud Storage Insulated Bottle",
     "price": 22000,
-    "imageUrl": "/images/gcs-bottle.jpg",
-    "stock": 35
+    "imageUrl": "/images/gcs-bottle.svg",
+    "stock": 35,
+    "description": "Stainless-steel vacuum-insulated bottle offering eleven nines of hydration durability for cold drinks up to 24 hours."
   },
   {
     "id": "prod-7",
     "name": "Pub/Sub Wireless Mouse",
     "price": 28500,
-    "imageUrl": "/images/pubsub-mouse.jpg",
-    "stock": 20
+    "imageUrl": "/images/pubsub-mouse.svg",
+    "stock": 20,
+    "description": "Ergonomic low-latency wireless mouse with silent switches and real-time event-driven tracking precision."
   },
   {
     "id": "prod-8",
     "name": "Anthos Laptop Backpack",
     "price": 65000,
-    "imageUrl": "/images/anthos-backpack.jpg",
-    "stock": 12
+    "imageUrl": "/images/anthos-backpack.svg",
+    "stock": 12,
+    "description": "Water-resistant commuter backpack with a padded 16-inch laptop sleeve, organizer pockets, and hybrid-cloud durability."
+  },
+  {
+    "id": "prod-9",
+    "name": "Cloud Run XL Desk Mat",
+    "price": 24000,
+    "imageUrl": "/images/cloud-run-deskmat.svg",
+    "stock": 30,
+    "description": "Extended micro-woven desk mat with stitched edges, non-slip rubber base, and subtle cloud architecture trace artwork."
+  },
+  {
+    "id": "prod-10",
+    "name": "Firestore 7-in-1 USB-C Hub",
+    "price": 42000,
+    "imageUrl": "/images/firestore-hub.svg",
+    "stock": 18,
+    "description": "Anodized aluminum USB-C hub featuring 4K HDMI, 100W power delivery pass-through, and high-speed data ports."
+  },
+  {
+    "id": "prod-11",
+    "name": "Cloud Armor Blue-Light Glasses",
+    "price": 19500,
+    "imageUrl": "/images/cloud-armor-glasses.svg",
+    "stock": 45,
+    "description": "Lightweight acetate frames with anti-reflective blue-light filtering lenses that shield your eyes during long coding sessions."
+  },
+  {
+    "id": "prod-12",
+    "name": "Looker Studio 15\" Portable Monitor",
+    "price": 185000,
+    "imageUrl": "/images/looker-monitor.svg",
+    "stock": 8,
+    "description": "Ultra-slim 15.6-inch Full HD IPS USB-C portable display with magnetic kickstand cover for dashboards on the go."
   }
 ]

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260">
+  <defs>
+    <linearGradient id="bg4" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fef3c7"/>
+      <stop offset="100%" stop-color="#fde68a"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="260" fill="url(#bg4)"/>
+  <!-- Sticker 1: Cloud Badge -->
+  <g transform="rotate(-12 130 120)">
+    <rect x="70" y="70" width="115" height="95" rx="18" fill="#ffffff" stroke="#0f172a" stroke-width="3.5"/>
+    <path d="M105 130 C93 130 88 116 98 110 C100 96 118 92 126 102 C136 96 152 104 150 116 C158 120 154 130 145 130 Z" fill="#1a73e8"/>
+    <circle cx="115" cy="116" r="6" fill="#fbbc04"/>
+  </g>
+  <!-- Sticker 2: Spanner Hex -->
+  <g transform="rotate(10 260 110)">
+    <polygon points="260,55 305,80 305,130 260,155 215,130 215,80" fill="#ffffff" stroke="#0f172a" stroke-width="3.5"/>
+    <polygon points="260,68 293,87 293,123 260,142 227,123 227,87" fill="#34a853"/>
+    <circle cx="260" cy="105" r="14" fill="#ffffff"/>
+  </g>
+  <!-- Sticker 3: Lightning Star -->
+  <g transform="rotate(-5 200 185)">
+    <circle cx="200" cy="180" r="46" fill="#ffffff" stroke="#0f172a" stroke-width="3.5"/>
+    <circle cx="200" cy="180" r="36" fill="#ea4335"/>
+    <polygon points="205,154 186,182 201,182 195,206 216,176 201,176" fill="#fbbc04"/>
+  </g>
+</svg>

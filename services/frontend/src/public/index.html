@@ -6,12 +6,14 @@
   <title>CloudMart — Storefront</title>
   <style>
     :root {
-      --bg: #f8fafc;
+      --bg: #f7f7f8;
       --surface: #ffffff;
       --primary: #1a73e8;
       --primary-hover: #1557b0;
+      --accent-pill: #c8102e;
+      --accent-pill-hover: #a50d26;
       --border: #e2e8f0;
-      --text: #0f172a;
+      --text: #111827;
       --muted: #64748b;
       --success-bg: #dcfce7;
       --success-text: #166534;
@@ -23,6 +25,9 @@
     }
     body {
       margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: var(--bg);
       color: var(--text);
@@ -45,60 +50,92 @@
     .header-meta {
       font-size: 0.9rem;
       display: flex;
-      gap: 1.25rem;
+      gap: 1rem;
       align-items: center;
     }
-    .cart-pill {
-      background: rgba(255, 255, 255, 0.18);
-      padding: 0.35rem 0.75rem;
+    .cart-nav-btn {
+      background: #ffffff;
+      color: var(--primary);
+      border: none;
+      padding: 0.45rem 1rem;
       border-radius: 999px;
-      font-weight: 600;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
     }
+    .cart-nav-btn:hover {
+      background: #f1f5f9;
+    }
+
     main {
-      max-width: 1200px;
-      margin: 2rem auto;
+      flex: 1;
+      width: 100%;
+      max-width: 1180px;
+      margin: 2.25rem auto;
       padding: 0 1.5rem;
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 2rem;
-      align-items: start;
     }
-    @media (max-width: 860px) {
-      main {
-        grid-template-columns: 1fr;
-      }
+
+    .view-section {
+      display: none;
     }
+    .view-section.active {
+      display: block;
+    }
+
     .panel {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.5rem;
+      border-radius: 14px;
+      padding: 1.75rem;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
     }
-    .panel h2 {
-      margin-top: 0;
-      margin-bottom: 1rem;
-      font-size: 1.25rem;
+    .catalogue-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
     }
+    .catalogue-header h2 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+
+    /* Product Catalogue Grid */
     .product-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1.25rem;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.35rem;
     }
     .product-card {
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       background: var(--surface);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.07);
+    }
+    .product-card-link {
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
     }
     .product-card img {
       width: 100%;
-      height: 135px;
+      height: 165px;
       object-fit: cover;
       background: #e8f0fe;
       border-bottom: 1px solid var(--border);
+      display: block;
     }
     .product-body {
       padding: 1rem;
@@ -109,7 +146,11 @@
     .product-name {
       font-weight: 600;
       font-size: 1rem;
-      margin: 0 0 0.4rem 0;
+      margin: 0 0 0.35rem 0;
+      cursor: pointer;
+    }
+    .product-name:hover {
+      color: var(--primary);
     }
     .product-price {
       font-size: 1.1rem;
@@ -122,6 +163,56 @@
       color: var(--muted);
       margin: 0 0 1rem 0;
     }
+    .product-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: auto;
+      align-items: center;
+    }
+    .qty-input {
+      width: 68px;
+      padding: 0.55rem 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      text-align: center;
+      font-weight: 600;
+    }
+    .product-actions button {
+      flex: 1;
+    }
+
+    /* Pill Buttons matching Screenshots */
+    .btn-pill-solid {
+      background: var(--accent-pill);
+      color: #ffffff;
+      border: 1.5px solid var(--accent-pill);
+      border-radius: 999px;
+      padding: 0.6rem 1.45rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .btn-pill-solid:hover:not(:disabled) {
+      background: var(--accent-pill-hover);
+      border-color: var(--accent-pill-hover);
+    }
+    .btn-pill-outline {
+      background: transparent;
+      color: var(--accent-pill);
+      border: 1.5px solid var(--accent-pill);
+      border-radius: 999px;
+      padding: 0.6rem 1.35rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .btn-pill-outline:hover:not(:disabled) {
+      background: rgba(200, 16, 46, 0.06);
+    }
+
     button {
       background: var(--primary);
       color: #ffffff;
@@ -140,60 +231,257 @@
       opacity: 0.5;
       cursor: not-allowed;
     }
-    .btn-secondary {
-      background: transparent;
+
+    /* Single Product Detail View */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: none;
+      border: none;
       color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 600;
+      padding: 0;
+      margin-bottom: 1.5rem;
+      cursor: pointer;
+    }
+    .back-link:hover {
+      color: var(--primary);
+      background: none;
+    }
+    .detail-layout {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      padding: 0.5rem 0 1.25rem 0;
+    }
+    @media (max-width: 760px) {
+      .detail-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+    }
+    .detail-image-wrap {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #f1f5f9;
+      border-radius: 12px 48px 12px 12px;
+      overflow: hidden;
       border: 1px solid var(--border);
     }
-    .btn-secondary:hover:not(:disabled) {
-      background: #f1f5f9;
-      color: var(--text);
+    .detail-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
-    .cart-list {
-      list-style: none;
-      padding: 0;
+    .detail-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .detail-title {
+      font-size: 2.5rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.18;
       margin: 0 0 1rem 0;
     }
-    .cart-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.6rem 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.92rem;
+    .detail-price {
+      font-size: 1.55rem;
+      font-weight: 500;
+      margin: 0 0 1.25rem 0;
     }
-    .cart-total-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 1.15rem;
-      font-weight: 700;
-      margin: 1rem 0;
+    .detail-description {
+      font-size: 1rem;
+      color: #374151;
+      margin: 0 0 0.75rem 0;
+      max-width: 46ch;
     }
-    form {
-      margin-top: 1.25rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid var(--border);
-    }
-    label {
-      display: block;
+    .detail-stock {
       font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 0.4rem;
+      color: var(--muted);
+      margin: 0 0 1.5rem 0;
     }
-    input[type="email"] {
-      width: 100%;
-      padding: 0.65rem 0.75rem;
+    .detail-qty-select {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 112px;
+      padding: 0.65rem 2.2rem 0.65rem 1rem;
+      font-size: 1rem;
+      color: var(--text);
+      background-color: #ffffff;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23334155' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.85rem center;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      margin-bottom: 1.35rem;
+      cursor: pointer;
+    }
+
+    /* Dedicated Cart & Checkout Page (Matching Screenshot 1) */
+    .cart-page-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 4.5rem;
+      align-items: start;
+      padding: 1rem 0 2.5rem 0;
+    }
+    @media (max-width: 900px) {
+      .cart-page-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+    }
+    .cart-page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #d1d5db;
+    }
+    .cart-page-header h2 {
+      margin: 0;
+      font-size: 2.15rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+    .cart-header-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+    .cart-page-items {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .cart-page-item {
+      display: grid;
+      grid-template-columns: 118px 1fr;
+      gap: 1.35rem;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid #d1d5db;
+      align-items: center;
+    }
+    .cart-item-thumb {
+      width: 118px;
+      height: 118px;
+      border-radius: 18px;
+      object-fit: cover;
+      background: #e8f0fe;
       border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 0.95rem;
-      margin-bottom: 0.9rem;
+      display: block;
     }
+    .cart-item-details {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 105px;
+    }
+    .cart-item-title {
+      font-size: 1.15rem;
+      font-weight: 500;
+      margin: 0 0 0.25rem 0;
+      color: var(--text);
+    }
+    .cart-item-sku {
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+      margin: 0;
+    }
+    .cart-item-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-top: 1.25rem;
+      font-size: 1.05rem;
+    }
+    .cart-summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.15rem 0;
+      border-bottom: 1px solid #d1d5db;
+      font-size: 1.05rem;
+      color: #1f2937;
+    }
+    .cart-grand-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 1.5rem 0 0.5rem 0;
+    }
+    .cart-grand-total-row span:first-child {
+      font-size: 1.85rem;
+      font-weight: 500;
+    }
+    .cart-grand-total-row span:last-child {
+      font-size: 1.95rem;
+      font-weight: 500;
+    }
+
+    /* Checkout Form (Shipping Address & Payment Method) */
+    .checkout-section-title {
+      font-size: 2.15rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      margin: 0 0 1.4rem 0;
+    }
+    .checkout-field {
+      background: #ffffff;
+      padding: 0.55rem 0.9rem 0.5rem 0.9rem;
+      border-bottom: 1.5px solid #9ca3af;
+      margin-bottom: 1.15rem;
+    }
+    .checkout-field:focus-within {
+      border-bottom-color: var(--accent-pill);
+    }
+    .checkout-field label {
+      display: block;
+      font-size: 0.76rem;
+      color: #6b7280;
+      font-weight: 500;
+      margin-bottom: 0.2rem;
+    }
+    .checkout-field input,
+    .checkout-field select {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 1rem;
+      color: var(--text);
+      padding: 0.1rem 0;
+      font-family: inherit;
+    }
+    .checkout-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.15rem;
+    }
+    .checkout-row-3 {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr 0.75fr;
+      gap: 1.15rem;
+    }
+    .place-order-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 1.75rem;
+    }
+
     .status-box {
-      margin-top: 1rem;
+      margin-top: 1.15rem;
       padding: 0.85rem 1rem;
       border-radius: 8px;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       display: none;
     }
     .status-box.success {
@@ -206,60 +494,373 @@
       background: var(--error-bg);
       color: var(--error-text);
     }
+
+    /* Order Complete View (Matching Screenshot 2) */
+    .order-complete-box {
+      max-width: 720px;
+      margin: 2.5rem auto 4rem auto;
+      text-align: center;
+      padding: 1rem 1.5rem;
+    }
+    .order-complete-box h2 {
+      font-size: 2.75rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      margin: 0 0 0.75rem 0;
+    }
+    .order-complete-subtitle {
+      font-size: 1.18rem;
+      color: #1f2937;
+      margin: 0 0 3rem 0;
+    }
+    .order-complete-table {
+      text-align: left;
+      margin-bottom: 2.75rem;
+    }
+    .order-complete-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 1.45rem 0;
+      border-bottom: 1px solid #d1d5db;
+      font-size: 1.25rem;
+    }
+    .order-complete-row:last-child {
+      border-bottom: none;
+    }
+    .order-complete-row span:first-child {
+      color: #111827;
+    }
+    .order-complete-row span:last-child {
+      text-align: right;
+      font-family: inherit;
+      color: #111827;
+      word-break: break-all;
+      max-width: 60%;
+    }
+
+    /* Footer */
+    footer {
+      background: #0f172a;
+      color: #cbd5e1;
+      margin-top: auto;
+      padding: 2.25rem 2rem;
+      border-top: 1px solid #1e293b;
+    }
+    .footer-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .footer-brand strong {
+      color: #ffffff;
+      font-size: 1.1rem;
+    }
+    .footer-brand p {
+      margin: 0.35rem 0 0 0;
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+    .footer-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .footer-pill {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      padding: 0.28rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .footer-copy {
+      width: 100%;
+      border-top: 1px solid #1e293b;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+    .footer-copy a {
+      color: #93c5fd;
+      text-decoration: none;
+    }
+    .footer-copy a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
   <header>
-    <h1>CloudMart</h1>
+    <div onclick="showCatalogueView()" style="cursor: pointer;" title="Back to all products">
+      <h1>CloudMart</h1>
+    </div>
     <div class="header-meta">
       <span>Cart ID: <code id="cartIdDisplay">...</code></span>
-      <span class="cart-pill">Total: <span id="headerCartTotal">₦0</span></span>
+      <button type="button" class="cart-nav-btn" onclick="showCartView()">
+        <span>Cart (<span id="headerCartCount">0</span>)</span>
+        <span>&bull;</span>
+        <span id="headerCartTotal">₦0</span>
+      </button>
     </div>
   </header>
 
   <main>
-    <section class="panel">
-      <h2>Products</h2>
+    <!-- 1. Catalogue Grid View -->
+    <section id="catalogueView" class="view-section active panel">
+      <div class="catalogue-header">
+        <h2>Products</h2>
+        <button type="button" class="btn-pill-outline" onclick="showCartView()">
+          View Cart (<span id="catalogueCartCount">0</span>)
+        </button>
+      </div>
       <div id="productGrid" class="product-grid">Loading products...</div>
     </section>
 
-    <aside class="panel">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2 style="margin: 0;">Your Cart</h2>
-        <button id="clearCartBtn" type="button" class="btn-secondary" style="padding: 0.35rem 0.7rem; font-size: 0.8rem;">
-          Clear
+    <!-- 2. Single Product Detail View -->
+    <section id="productDetailView" class="view-section panel">
+      <button type="button" class="back-link" onclick="showCatalogueView()">
+        &larr; Back to all products
+      </button>
+      <div id="productDetailContent"></div>
+    </section>
+
+    <!-- 3. Dedicated Cart & Checkout View (Matching Screenshot 1) -->
+    <section id="cartView" class="view-section">
+      <div class="cart-page-grid">
+        <!-- Left Column: Cart Items & Totals -->
+        <div>
+          <div class="cart-page-header">
+            <h2 id="cartPageHeading">Cart (0)</h2>
+            <div class="cart-header-actions">
+              <button id="clearCartBtn" type="button" class="btn-pill-outline">
+                Empty Cart
+              </button>
+              <button type="button" class="btn-pill-solid" onclick="showCatalogueView()">
+                Continue Shopping
+              </button>
+            </div>
+          </div>
+
+          <ul id="cartList" class="cart-page-items">
+            <li style="padding: 2rem 0; color: var(--muted);">Your cart is empty.</li>
+          </ul>
+
+          <div class="cart-summary-row">
+            <span>Shipping</span>
+            <span id="cartShipping">₦0</span>
+          </div>
+
+          <div class="cart-grand-total-row">
+            <span>Total</span>
+            <span id="cartTotal">₦0</span>
+          </div>
+        </div>
+
+        <!-- Right Column: Shipping Address & Payment Method Form -->
+        <div>
+          <form id="checkoutForm">
+            <h2 class="checkout-section-title">Shipping Address</h2>
+
+            <div class="checkout-field">
+              <label for="customerEmail">E-mail Address</label>
+              <input
+                type="email"
+                id="customerEmail"
+                name="customerEmail"
+                value="someone@example.com"
+                required
+              />
+            </div>
+
+            <div class="checkout-field">
+              <label for="streetAddress">Street Address</label>
+              <input
+                type="text"
+                id="streetAddress"
+                name="streetAddress"
+                value="24 Aba Road, GRA Phase 2"
+                required
+              />
+            </div>
+
+            <div class="checkout-field">
+              <label for="zipCode">Zip Code</label>
+              <input
+                type="text"
+                id="zipCode"
+                name="zipCode"
+                value="500272"
+                required
+              />
+            </div>
+
+            <div class="checkout-field">
+              <label for="city">City</label>
+              <input
+                type="text"
+                id="city"
+                name="city"
+                value="Port Harcourt"
+                required
+              />
+            </div>
+
+            <div class="checkout-row-2">
+              <div class="checkout-field">
+                <label for="state">State</label>
+                <input
+                  type="text"
+                  id="state"
+                  name="state"
+                  value="Rivers State"
+                  required
+                />
+              </div>
+              <div class="checkout-field">
+                <label for="country">Country</label>
+                <input
+                  type="text"
+                  id="country"
+                  name="country"
+                  value="Nigeria"
+                  required
+                />
+              </div>
+            </div>
+
+            <h2 class="checkout-section-title" style="margin-top: 1.75rem;">Payment Method</h2>
+
+            <div class="checkout-field">
+              <label for="cardNumber">Credit Card Number</label>
+              <input
+                type="text"
+                id="cardNumber"
+                name="cardNumber"
+                value="4432801561520454"
+                required
+              />
+            </div>
+
+            <div class="checkout-row-3">
+              <div class="checkout-field">
+                <label for="cardMonth">Month</label>
+                <select id="cardMonth" name="cardMonth">
+                  <option value="January" selected>January</option>
+                  <option value="February">February</option>
+                  <option value="March">March</option>
+                  <option value="April">April</option>
+                  <option value="May">May</option>
+                  <option value="June">June</option>
+                  <option value="July">July</option>
+                  <option value="August">August</option>
+                  <option value="September">September</option>
+                  <option value="October">October</option>
+                  <option value="November">November</option>
+                  <option value="December">December</option>
+                </select>
+              </div>
+
+              <div class="checkout-field">
+                <label for="cardYear">Year</label>
+                <select id="cardYear" name="cardYear">
+                  <option value="2026">2026</option>
+                  <option value="2027" selected>2027</option>
+                  <option value="2028">2028</option>
+                  <option value="2029">2029</option>
+                  <option value="2030">2030</option>
+                </select>
+              </div>
+
+              <div class="checkout-field">
+                <label for="cardCvv">CVV</label>
+                <input
+                  type="password"
+                  id="cardCvv"
+                  name="cardCvv"
+                  value="123"
+                  maxlength="4"
+                  required
+                />
+              </div>
+            </div>
+
+            <div id="statusBox" class="status-box"></div>
+
+            <div class="place-order-wrap">
+              <button id="checkoutBtn" type="submit" class="btn-pill-solid" style="padding: 0.75rem 2.1rem; font-size: 1rem;">
+                Place Order
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Order Complete View (Matching Screenshot 2) -->
+    <section id="orderCompleteView" class="view-section">
+      <div class="order-complete-box">
+        <h2>Your order is complete!</h2>
+        <p class="order-complete-subtitle">We've sent you a confirmation email.</p>
+
+        <div class="order-complete-table">
+          <div class="order-complete-row">
+            <span>Confirmation #</span>
+            <span id="completeOrderId">&mdash;</span>
+          </div>
+          <div class="order-complete-row">
+            <span>Tracking #</span>
+            <span id="completeTrackingId">&mdash;</span>
+          </div>
+          <div class="order-complete-row">
+            <span>Total Paid</span>
+            <span id="completeTotalPaid">₦0</span>
+          </div>
+        </div>
+
+        <button type="button" class="btn-pill-solid" style="padding: 0.78rem 2.1rem; font-size: 1rem;" onclick="showCatalogueView()">
+          Continue Shopping
         </button>
       </div>
-
-      <ul id="cartList" class="cart-list" style="margin-top: 1rem;">
-        <li style="color: var(--muted);">Your cart is empty.</li>
-      </ul>
-
-      <div class="cart-total-row">
-        <span>Total</span>
-        <span id="cartTotal">₦0</span>
-      </div>
-
-      <form id="checkoutForm">
-        <label for="customerEmail">Customer Email</label>
-        <input
-          type="email"
-          id="customerEmail"
-          name="customerEmail"
-          placeholder="ada@example.com"
-          required
-        />
-        <button id="checkoutBtn" type="submit" style="width: 100%;">
-          Checkout
-        </button>
-      </form>
-
-      <div id="statusBox" class="status-box"></div>
-    </aside>
+    </section>
   </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <strong>CloudMart</strong>
+        <p>Google Cloud Microservices Reference Shop &mdash; GKE Autopilot, Cloud Run &amp; Pub/Sub</p>
+      </div>
+      <div class="footer-pills">
+        <span class="footer-pill">frontend :8080</span>
+        <span class="footer-pill">product :8081</span>
+        <span class="footer-pill">cart :8082</span>
+        <span class="footer-pill">order :8083</span>
+        <span class="footer-pill">payment :8084</span>
+        <span class="footer-pill">notification :8085</span>
+      </div>
+      <div class="footer-copy">
+        <span>&copy; 2026 CloudMart Demo &bull; Node.js 20 + Express</span>
+        <div>
+          <a href="#" onclick="showCatalogueView(); return false;" style="margin-right: 1rem;">All Products</a>
+          <a href="#cart" onclick="showCartView(); return false;">View Cart</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <script>
     const CART_STORAGE_KEY = 'cloudmart_cart_id';
+    const SHIPPING_COST = 7500;
+    let catalogueCache = new Map();
 
     function formatNaira(amount) {
       return '₦' + Number(amount || 0).toLocaleString('en-US');
@@ -275,10 +876,118 @@
       return cartId;
     }
 
+    function hideAllViews() {
+      document.querySelectorAll('.view-section').forEach((el) => {
+        el.classList.remove('active');
+      });
+    }
+
+    function clearStatus() {
+      const box = document.getElementById('statusBox');
+      box.className = 'status-box';
+      box.textContent = '';
+    }
+
     function showStatus(type, message) {
       const box = document.getElementById('statusBox');
       box.className = 'status-box ' + type;
       box.textContent = message;
+    }
+
+    function showCatalogueView() {
+      clearStatus();
+      hideAllViews();
+      document.getElementById('catalogueView').classList.add('active');
+      if (window.location.hash) {
+        history.pushState('', document.title, window.location.pathname + window.location.search);
+      }
+    }
+
+    async function showCartView() {
+      clearStatus();
+      hideAllViews();
+      document.getElementById('cartView').classList.add('active');
+      if (window.location.hash !== '#cart') {
+        history.pushState('', document.title, '#cart');
+      }
+      await loadCart();
+    }
+
+    function showOrderCompleteView(order) {
+      clearStatus();
+      hideAllViews();
+      document.getElementById('orderCompleteView').classList.add('active');
+
+      const rand5 = Math.floor(10000 + Math.random() * 90000);
+      const rand9 = Math.floor(100000000 + Math.random() * 900000000);
+      const trackingNumber = `DV-${rand5}-${rand9}`;
+
+      document.getElementById('completeOrderId').textContent = order.orderId;
+      document.getElementById('completeTrackingId').textContent = trackingNumber;
+      document.getElementById('completeTotalPaid').textContent = formatNaira(order.total);
+      history.pushState('', document.title, '#order-complete');
+    }
+
+    async function openProductDetail(productId) {
+      clearStatus();
+      hideAllViews();
+      const detailViewEl = document.getElementById('productDetailView');
+      const detailContentEl = document.getElementById('productDetailContent');
+
+      detailViewEl.classList.add('active');
+      detailContentEl.innerHTML = '<p style="color: var(--muted);">Loading product details...</p>';
+
+      try {
+        const res = await fetch(`/api/products/${encodeURIComponent(productId)}`);
+        if (!res.ok) throw new Error('Product not found');
+        const p = await res.json();
+        catalogueCache.set(p.id, p);
+
+        const maxQty = Math.max(1, Math.min(Number(p.stock) || 10, 20));
+        const qtyOptions = Array.from({ length: maxQty }, (_, i) => i + 1)
+          .map((n) => `<option value="${n}">${n}</option>`)
+          .join('');
+
+        const description =
+          p.description ||
+          `Official Google Cloud developer merchandise — ${p.name}.`;
+
+        detailContentEl.innerHTML = `
+          <div class="detail-layout">
+            <div class="detail-image-wrap">
+              <img src="${p.imageUrl}" alt="${p.name}" />
+            </div>
+            <div class="detail-info">
+              <h1 class="detail-title">${p.name}</h1>
+              <p class="detail-price">${formatNaira(p.price)}</p>
+              <p class="detail-description">${description}</p>
+              <p class="detail-stock">${p.stock} available in stock</p>
+              <select
+                id="detail-qty-${p.id}"
+                class="detail-qty-select"
+                aria-label="Quantity"
+                ${p.stock < 1 ? 'disabled' : ''}
+              >
+                ${qtyOptions}
+              </select>
+              <button
+                type="button"
+                class="btn-pill-solid"
+                style="padding: 0.72rem 1.85rem; font-size: 0.96rem;"
+                onclick="addToCart('${p.id}', 'detail-qty-${p.id}', true)"
+                ${p.stock < 1 ? 'disabled' : ''}
+              >
+                Add To Cart
+              </button>
+            </div>
+          </div>
+        `;
+        if (window.location.hash !== `#product/${encodeURIComponent(p.id)}`) {
+          history.pushState('', document.title, `#product/${encodeURIComponent(p.id)}`);
+        }
+      } catch (err) {
+        detailContentEl.innerHTML = '<p style="color: var(--error-text);">Could not load product details.</p>';
+      }
     }
 
     async function loadProducts() {
@@ -287,24 +996,40 @@
         const res = await fetch('/api/products');
         if (!res.ok) throw new Error('Failed to load products');
         const products = await res.json();
+        for (const p of products) {
+          catalogueCache.set(p.id, p);
+        }
 
         grid.innerHTML = products
           .map(
             (p) => `
           <div class="product-card">
-            <img src="${p.imageUrl}" alt="${p.name}" />
+            <div class="product-card-link" onclick="openProductDetail('${p.id}')">
+              <img src="${p.imageUrl}" alt="${p.name}" />
+            </div>
             <div class="product-body">
-              <h3 class="product-name">${p.name}</h3>
+              <h3 class="product-name" onclick="openProductDetail('${p.id}')">${p.name}</h3>
               <p class="product-price">${formatNaira(p.price)}</p>
               <p class="product-stock">${p.stock} in stock</p>
-              <button
-                type="button"
-                style="margin-top: auto;"
-                onclick="addToCart('${p.id}')"
-                ${p.stock < 1 ? 'disabled' : ''}
-              >
-                Add to Cart
-              </button>
+              <div class="product-actions">
+                <input
+                  type="number"
+                  id="qty-${p.id}"
+                  class="qty-input"
+                  min="1"
+                  max="${p.stock}"
+                  value="1"
+                  aria-label="Quantity for ${p.name}"
+                  ${p.stock < 1 ? 'disabled' : ''}
+                />
+                <button
+                  type="button"
+                  onclick="addToCart('${p.id}', 'qty-${p.id}', false)"
+                  ${p.stock < 1 ? 'disabled' : ''}
+                >
+                  Add to Cart
+                </button>
+              </div>
             </div>
           </div>
         `
@@ -318,55 +1043,96 @@
     async function loadCart() {
       const cartId = getOrCreateCartId();
       const listEl = document.getElementById('cartList');
+      const shippingEl = document.getElementById('cartShipping');
       const totalEl = document.getElementById('cartTotal');
       const headerTotalEl = document.getElementById('headerCartTotal');
+      const headerCountEl = document.getElementById('headerCartCount');
+      const catalogueCountEl = document.getElementById('catalogueCartCount');
+      const cartPageHeadingEl = document.getElementById('cartPageHeading');
 
       try {
         const res = await fetch(`/api/carts/${encodeURIComponent(cartId)}`);
         if (!res.ok) throw new Error('Failed to fetch cart');
         const cart = await res.json();
         const items = Array.isArray(cart.items) ? cart.items : [];
-        const formattedTotal = formatNaira(cart.total || 0);
+        const totalUnits = items.reduce((sum, i) => sum + Number(i.quantity || 0), 0);
+        const subtotal = Number(cart.total || 0);
+        const shipping = items.length > 0 ? SHIPPING_COST : 0;
+        const grandTotal = subtotal + shipping;
 
-        totalEl.textContent = formattedTotal;
-        headerTotalEl.textContent = formattedTotal;
+        shippingEl.textContent = formatNaira(shipping);
+        totalEl.textContent = formatNaira(grandTotal);
+        headerTotalEl.textContent = formatNaira(subtotal);
+        headerCountEl.textContent = totalUnits;
+        catalogueCountEl.textContent = totalUnits;
+        cartPageHeadingEl.textContent = `Cart (${totalUnits})`;
 
         if (items.length === 0) {
-          listEl.innerHTML = '<li style="color: var(--muted);">Your cart is empty.</li>';
+          listEl.innerHTML =
+            '<li style="padding: 2rem 0; color: var(--muted); border-bottom: 1px solid #d1d5db;">Your cart is empty. Click "Continue Shopping" to add items.</li>';
           return;
         }
 
         listEl.innerHTML = items
-          .map(
-            (item) => `
-          <li class="cart-item">
-            <span><strong>${item.quantity}x</strong> ${item.name}</span>
-            <span>${formatNaira(item.price * item.quantity)}</span>
-          </li>
-        `
-          )
+          .map((item) => {
+            const cachedProd = catalogueCache.get(item.productId);
+            const imgUrl =
+              item.imageUrl ||
+              (cachedProd && cachedProd.imageUrl) ||
+              `/images/${item.productId}.svg`;
+            const sku = String(item.productId || '').toUpperCase();
+            return `
+              <li class="cart-page-item">
+                <img class="cart-item-thumb" src="${imgUrl}" alt="${item.name}" />
+                <div class="cart-item-details">
+                  <div>
+                    <h3 class="cart-item-title">${item.name}</h3>
+                    <p class="cart-item-sku">SKU #${sku}</p>
+                  </div>
+                  <div class="cart-item-bottom">
+                    <span>Quantity: ${item.quantity}</span>
+                    <strong>${formatNaira(item.price * item.quantity)}</strong>
+                  </div>
+                </div>
+              </li>
+            `;
+          })
           .join('');
       } catch (err) {
-        listEl.innerHTML = '<li style="color: var(--muted);">Could not load cart.</li>';
+        listEl.innerHTML = '<li style="padding: 1.5rem 0; color: var(--muted);">Could not load cart.</li>';
       }
     }
 
-    async function addToCart(productId) {
+    async function addToCart(productId, inputId, navigateToCart = false) {
       const cartId = getOrCreateCartId();
+      const qtyEl = document.getElementById(inputId || `qty-${productId}`);
+      const parsedQty = qtyEl ? parseInt(qtyEl.value, 10) : 1;
+
+      if (!Number.isInteger(parsedQty) || parsedQty < 1) {
+        alert('Please enter a valid quantity of at least 1');
+        return;
+      }
+
       try {
         const res = await fetch(`/api/carts/${encodeURIComponent(cartId)}/items`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ productId, quantity: 1 })
+          body: JSON.stringify({ productId, quantity: parsedQty })
         });
         const data = await res.json();
         if (!res.ok) {
-          showStatus('error', data.error || 'Could not add item to cart');
+          alert(data.error || 'Could not add item to cart');
           return;
         }
+        if (qtyEl) {
+          qtyEl.value = '1';
+        }
         await loadCart();
+        if (navigateToCart) {
+          await showCartView();
+        }
       } catch (err) {
-        showStatus('error', 'Network error while adding item to cart');
+        alert('Network error while adding item to cart');
       }
     }
 
@@ -378,6 +1144,7 @@
 
     document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
       e.preventDefault();
+      clearStatus();
       const cartId = getOrCreateCartId();
       const customerEmail = document.getElementById('customerEmail').value.trim();
       if (!customerEmail) return;
@@ -389,18 +1156,15 @@
         const res = await fetch('/api/orders', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ cartId, customerEmail })
+          body: JSON.stringify({ cartId, customerEmail, shippingCost: SHIPPING_COST })
         });
         const data = await res.json();
 
         if (!res.ok) {
           showStatus('error', data.error || 'Checkout failed');
         } else {
-          showStatus(
-            'success',
-            `Order ${data.orderId} confirmed for ${data.customerEmail} — Total ${formatNaira(data.total)}`
-          );
           await loadCart();
+          showOrderCompleteView(data);
         }
       } catch (err) {
         showStatus('error', 'Unable to reach Order Service');
@@ -409,9 +1173,30 @@
       }
     });
 
+    function handleHashRoute() {
+      const hash = window.location.hash;
+      if (hash.startsWith('#product/')) {
+        const id = decodeURIComponent(hash.replace('#product/', ''));
+        if (id) openProductDetail(id);
+      } else if (hash === '#cart') {
+        showCartView();
+      } else if (hash === '#order-complete') {
+        // Stay on order complete if active, otherwise go to catalogue
+        if (!document.getElementById('orderCompleteView').classList.contains('active')) {
+          showCatalogueView();
+        }
+      } else {
+        showCatalogueView();
+      }
+    }
+
+    window.addEventListener('popstate', handleHashRoute);
+
     getOrCreateCartId();
-    loadProducts();
-    loadCart();
+    loadProducts().then(() => {
+      loadCart();
+      handleHashRoute();
+    });
   </script>
 </body>
 </html>

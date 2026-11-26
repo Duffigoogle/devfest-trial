@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260">
+  <defs>
+    <linearGradient id="bg9" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e0e7ff"/>
+      <stop offset="100%" stop-color="#a5b4fc"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="260" fill="url(#bg9)"/>
+  <!-- Desk Mat Base -->
+  <rect x="45" y="65" width="310" height="140" rx="18" fill="#1e1b4b" stroke="#312e81" stroke-width="5"/>
+  <rect x="53" y="73" width="294" height="124" rx="12" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="6,4"/>
+  <!-- Circuit Grid Lines on Mat -->
+  <path d="M70 165 L140 165 L165 140 L260 140" fill="none" stroke="#4f46e5" stroke-width="3"/>
+  <circle cx="260" cy="140" r="5" fill="#38bdf8"/>
+  <path d="M90 105 L180 105 L205 125 L310 125" fill="none" stroke="#4f46e5" stroke-width="3"/>
+  <circle cx="310" cy="125" r="5" fill="#fbbc04"/>
+  <!-- Cloud Icon in Corner -->
+  <path d="M295 178 C286 178 282 168 290 163 C292 153 306 150 312 158 C320 153 332 159 330 168 C336 171 333 178 325 178 Z" fill="#38bdf8"/>
+</svg>
