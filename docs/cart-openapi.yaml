@@ -1,0 +1,121 @@
+openapi: 3.0.3
+info:
+  title: CloudMart Cart Service API
+  version: 1.0.0
+  description: Owns customer shopping carts keyed by cartId and validates items via the Product Service HTTP API (PRODUCT_URL).
+servers:
+  - url: http://localhost:8082
+    description: Local development
+  - url: http://cart:8082
+    description: Kubernetes internal service
+paths:
+  /healthz:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: Service is healthy
+  /carts/{cartId}:
+    get:
+      summary: Retrieve shopping cart by cartId
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Current shopping cart
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+    delete:
+      summary: Clear all items in the cart
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Emptied cart
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+  /carts/{cartId}/items:
+    post:
+      summary: Add an item or update item quantity in the cart after checking Product Service
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [productId, quantity]
+              properties:
+                productId:
+                  type: string
+                  example: prod-1
+                quantity:
+                  type: integer
+                  minimum: 1
+                  example: 2
+      responses:
+        '200':
+          description: Updated cart
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '400':
+          description: Invalid quantity or insufficient product stock
+        '404':
+          description: Product not found in Product Service
+components:
+  schemas:
+    CartItem:
+      type: object
+      required: [productId, name, price, quantity]
+      properties:
+        productId:
+          type: string
+          example: prod-1
+        name:
+          type: string
+          example: Cloud Run Developer Hoodie
+        price:
+          type: number
+          example: 35000
+        imageUrl:
+          type: string
+          example: /images/cloud-run-hoodie.jpg
+        quantity:
+          type: integer
+          example: 2
+    Cart:
+      type: object
+      required: [cartId, items, total, updatedAt]
+      properties:
+        cartId:
+          type: string
+          example: cart-123
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+        total:
+          type: number
+          example: 70000
+        updatedAt:
+          type: string
+          format: date-time

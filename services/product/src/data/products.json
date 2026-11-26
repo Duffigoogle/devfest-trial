@@ -1,0 +1,58 @@
+[
+  {
+    "id": "prod-1",
+    "name": "Cloud Run Developer Hoodie",
+    "price": 35000,
+    "imageUrl": "/images/cloud-run-hoodie.jpg",
+    "stock": 25
+  },
+  {
+    "id": "prod-2",
+    "name": "GKE Kubernetes Captain Mug",
+    "price": 12500,
+    "imageUrl": "/images/gke-mug.jpg",
+    "stock": 40
+  },
+  {
+    "id": "prod-3",
+    "name": "BigQuery Mechanical Keyboard",
+    "price": 95000,
+    "imageUrl": "/images/bigquery-keyboard.jpg",
+    "stock": 15
+  },
+  {
+    "id": "prod-4",
+    "name": "Spanner Global Sticker Pack",
+    "price": 4500,
+    "imageUrl": "/images/spanner-stickers.jpg",
+    "stock": 100
+  },
+  {
+    "id": "prod-5",
+    "name": "Vertex AI Snapback Cap",
+    "price": 18000,
+    "imageUrl": "/images/vertex-ai-cap.jpg",
+    "stock": 30
+  },
+  {
+    "id": "prod-6",
+    "name": "Cloud Storage Insulated Bottle",
+    "price": 22000,
+    "imageUrl": "/images/gcs-bottle.jpg",
+    "stock": 35
+  },
+  {
+    "id": "prod-7",
+    "name": "Pub/Sub Wireless Mouse",
+    "price": 28500,
+    "imageUrl": "/images/pubsub-mouse.jpg",
+    "stock": 20
+  },
+  {
+    "id": "prod-8",
+    "name": "Anthos Laptop Backpack",
+    "price": 65000,
+    "imageUrl": "/images/anthos-backpack.jpg",
+    "stock": 12
+  }
+]

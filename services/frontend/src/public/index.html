@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CloudMart — Storefront</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --primary: #1a73e8;
+      --primary-hover: #1557b0;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #64748b;
+      --success-bg: #dcfce7;
+      --success-text: #166534;
+      --error-bg: #fee2e2;
+      --error-text: #991b1b;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    header {
+      background: var(--primary);
+      color: #ffffff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+    .header-meta {
+      font-size: 0.9rem;
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+    }
+    .cart-pill {
+      background: rgba(255, 255, 255, 0.18);
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    @media (max-width: 860px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+    .panel h2 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+    .product-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+    }
+    .product-card img {
+      width: 100%;
+      height: 135px;
+      object-fit: cover;
+      background: #e8f0fe;
+      border-bottom: 1px solid var(--border);
+    }
+    .product-body {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .product-name {
+      font-weight: 600;
+      font-size: 1rem;
+      margin: 0 0 0.4rem 0;
+    }
+    .product-price {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0 0 0.25rem 0;
+    }
+    .product-stock {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin: 0 0 1rem 0;
+    }
+    button {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    button:hover:not(:disabled) {
+      background: var(--primary-hover);
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: #f1f5f9;
+      color: var(--text);
+    }
+    .cart-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1rem 0;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.92rem;
+    }
+    .cart-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 1rem 0;
+    }
+    form {
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+    input[type="email"] {
+      width: 100%;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      margin-bottom: 0.9rem;
+    }
+    .status-box {
+      margin-top: 1rem;
+      padding: 0.85rem 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      display: none;
+    }
+    .status-box.success {
+      display: block;
+      background: var(--success-bg);
+      color: var(--success-text);
+    }
+    .status-box.error {
+      display: block;
+      background: var(--error-bg);
+      color: var(--error-text);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>CloudMart</h1>
+    <div class="header-meta">
+      <span>Cart ID: <code id="cartIdDisplay">...</code></span>
+      <span class="cart-pill">Total: <span id="headerCartTotal">₦0</span></span>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Products</h2>
+      <div id="productGrid" class="product-grid">Loading products...</div>
+    </section>
+
+    <aside class="panel">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 style="margin: 0;">Your Cart</h2>
+        <button id="clearCartBtn" type="button" class="btn-secondary" style="padding: 0.35rem 0.7rem; font-size: 0.8rem;">
+          Clear
+        </button>
+      </div>
+
+      <ul id="cartList" class="cart-list" style="margin-top: 1rem;">
+        <li style="color: var(--muted);">Your cart is empty.</li>
+      </ul>
+
+      <div class="cart-total-row">
+        <span>Total</span>
+        <span id="cartTotal">₦0</span>
+      </div>
+
+      <form id="checkoutForm">
+        <label for="customerEmail">Customer Email</label>
+        <input
+          type="email"
+          id="customerEmail"
+          name="customerEmail"
+          placeholder="ada@example.com"
+          required
+        />
+        <button id="checkoutBtn" type="submit" style="width: 100%;">
+          Checkout
+        </button>
+      </form>
+
+      <div id="statusBox" class="status-box"></div>
+    </aside>
+  </main>
+
+  <script>
+    const CART_STORAGE_KEY = 'cloudmart_cart_id';
+
+    function formatNaira(amount) {
+      return '₦' + Number(amount || 0).toLocaleString('en-US');
+    }
+
+    function getOrCreateCartId() {
+      let cartId = localStorage.getItem(CART_STORAGE_KEY);
+      if (!cartId) {
+        cartId = 'cart-' + Math.random().toString(36).slice(2, 10);
+        localStorage.setItem(CART_STORAGE_KEY, cartId);
+      }
+      document.getElementById('cartIdDisplay').textContent = cartId;
+      return cartId;
+    }
+
+    function showStatus(type, message) {
+      const box = document.getElementById('statusBox');
+      box.className = 'status-box ' + type;
+      box.textContent = message;
+    }
+
+    async function loadProducts() {
+      const grid = document.getElementById('productGrid');
+      try {
+        const res = await fetch('/api/products');
+        if (!res.ok) throw new Error('Failed to load products');
+        const products = await res.json();
+
+        grid.innerHTML = products
+          .map(
+            (p) => `
+          <div class="product-card">
+            <img src="${p.imageUrl}" alt="${p.name}" />
+            <div class="product-body">
+              <h3 class="product-name">${p.name}</h3>
+              <p class="product-price">${formatNaira(p.price)}</p>
+              <p class="product-stock">${p.stock} in stock</p>
+              <button
+                type="button"
+                style="margin-top: auto;"
+                onclick="addToCart('${p.id}')"
+                ${p.stock < 1 ? 'disabled' : ''}
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        `
+          )
+          .join('');
+      } catch (err) {
+        grid.textContent = 'Unable to load product catalogue.';
+      }
+    }
+
+    async function loadCart() {
+      const cartId = getOrCreateCartId();
+      const listEl = document.getElementById('cartList');
+      const totalEl = document.getElementById('cartTotal');
+      const headerTotalEl = document.getElementById('headerCartTotal');
+
+      try {
+        const res = await fetch(`/api/carts/${encodeURIComponent(cartId)}`);
+        if (!res.ok) throw new Error('Failed to fetch cart');
+        const cart = await res.json();
+        const items = Array.isArray(cart.items) ? cart.items : [];
+        const formattedTotal = formatNaira(cart.total || 0);
+
+        totalEl.textContent = formattedTotal;
+        headerTotalEl.textContent = formattedTotal;
+
+        if (items.length === 0) {
+          listEl.innerHTML = '<li style="color: var(--muted);">Your cart is empty.</li>';
+          return;
+        }
+
+        listEl.innerHTML = items
+          .map(
+            (item) => `
+          <li class="cart-item">
+            <span><strong>${item.quantity}x</strong> ${item.name}</span>
+            <span>${formatNaira(item.price * item.quantity)}</span>
+          </li>
+        `
+          )
+          .join('');
+      } catch (err) {
+        listEl.innerHTML = '<li style="color: var(--muted);">Could not load cart.</li>';
+      }
+    }
+
+    async function addToCart(productId) {
+      const cartId = getOrCreateCartId();
+      try {
+        const res = await fetch(`/api/carts/${encodeURIComponent(cartId)}/items`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productId, quantity: 1 })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          showStatus('error', data.error || 'Could not add item to cart');
+          return;
+        }
+        await loadCart();
+      } catch (err) {
+        showStatus('error', 'Network error while adding item to cart');
+      }
+    }
+
+    document.getElementById('clearCartBtn').addEventListener('click', async () => {
+      const cartId = getOrCreateCartId();
+      await fetch(`/api/carts/${encodeURIComponent(cartId)}`, { method: 'DELETE' });
+      await loadCart();
+    });
+
+    document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const cartId = getOrCreateCartId();
+      const customerEmail = document.getElementById('customerEmail').value.trim();
+      if (!customerEmail) return;
+
+      const btn = document.getElementById('checkoutBtn');
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cartId, customerEmail })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          showStatus('error', data.error || 'Checkout failed');
+        } else {
+          showStatus(
+            'success',
+            `Order ${data.orderId} confirmed for ${data.customerEmail} — Total ${formatNaira(data.total)}`
+          );
+          await loadCart();
+        }
+      } catch (err) {
+        showStatus('error', 'Unable to reach Order Service');
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    getOrCreateCartId();
+    loadProducts();
+    loadCart();
+  </script>
+</body>
+</html>

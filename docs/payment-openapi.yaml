@@ -1,0 +1,99 @@
+openapi: 3.0.3
+info:
+  title: CloudMart Payment Service API
+  version: 1.0.0
+  description: >-
+    Mock payment service for CloudMart. Approves payments up to 1,000,000 Naira
+    and declines amounts over 1,000,000.
+servers:
+  - url: http://localhost:8084
+    description: Local development
+  - url: http://payment:8084
+    description: Kubernetes internal service
+paths:
+  /healthz:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: Service is healthy
+  /payments:
+    get:
+      summary: List processed payments
+      responses:
+        '200':
+          description: List of payments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Payment'
+    post:
+      summary: Process a payment for an order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChargeRequest'
+      responses:
+        '200':
+          description: Payment processed with status "approved" or "declined"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '400':
+          description: Invalid payment request
+  /payments/{paymentId}:
+    get:
+      summary: Get payment by ID
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Payment details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '404':
+          description: Payment not found
+components:
+  schemas:
+    ChargeRequest:
+      type: object
+      required: [orderId, amount]
+      properties:
+        orderId:
+          type: string
+          example: ord-1001
+        amount:
+          type: number
+          minimum: 0.01
+          example: 70000
+    Payment:
+      type: object
+      required: [paymentId, orderId, amount, status, processedAt]
+      properties:
+        paymentId:
+          type: string
+          example: pay-m3z1x-9a1b
+        orderId:
+          type: string
+          example: ord-1001
+        amount:
+          type: number
+          example: 70000
+        status:
+          type: string
+          enum: [approved, declined]
+          example: approved
+        processedAt:
+          type: string
+          format: date-time

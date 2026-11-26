@@ -1,20 +1,22 @@
 {
-  "name": "cloudmart",
+  "name": "cloudmart-monorepo",
   "version": "1.0.0",
   "private": true,
-  "description": "CloudMart E-Commerce Microservices Platform on Google Cloud (GKE Autopilot, Cloud SQL PostgreSQL, Cloud Pub/Sub)",
-  "workspaces": [
-    "libs/*",
-    "apps/*"
-  ],
-  "scripts": {
-    "build": "npm run build --workspaces --if-present",
-    "test": "node --test apps/product-service/test/product.spec.mjs apps/cart-service/test/cart.spec.mjs apps/order-service/test/order.spec.mjs apps/payment-service/test/payment.spec.mjs apps/notification-service/test/notification.spec.mjs tests/cloudmart-architecture.test.mjs",
-    "typecheck": "tsc --build tsconfig.json",
-    "docker:up": "docker compose up -d",
-    "docker:down": "docker compose down -v"
-  },
+  "description": "CloudMart microservices monorepo for Google Cloud live demo",
   "engines": {
     "node": ">=20.0.0"
+  },
+  "workspaces": [
+    "services/*"
+  ],
+  "scripts": {
+    "start": "node scripts/start-all.js",
+    "test": "npm test --workspaces --if-present",
+    "start:frontend": "npm --workspace=@cloudmart/frontend start",
+    "start:product": "npm --workspace=@cloudmart/product start",
+    "start:cart": "npm --workspace=@cloudmart/cart start",
+    "start:order": "npm --workspace=@cloudmart/order start",
+    "start:payment": "npm --workspace=@cloudmart/payment start",
+    "start:notification": "npm --workspace=@cloudmart/notification start"
   }
 }

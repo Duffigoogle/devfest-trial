@@ -1,0 +1,21 @@
+{
+  "name": "@cloudmart/cart",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CloudMart Shopping Cart Service",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  }
+}

@@ -1,0 +1,83 @@
+openapi: 3.0.3
+info:
+  title: CloudMart Product Service API
+  version: 1.0.0
+  description: Owns the 8-product catalogue (priced in Naira) and inventory stock for CloudMart.
+servers:
+  - url: http://localhost:8081
+    description: Local development
+  - url: http://product:8081
+    description: Kubernetes internal service
+paths:
+  /healthz:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /products:
+    get:
+      summary: List all products in the catalogue
+      responses:
+        '200':
+          description: Array of 8 catalogue products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+  /products/{id}:
+    get:
+      summary: Get product by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      required: [service, status]
+      properties:
+        service:
+          type: string
+          example: product
+        status:
+          type: string
+          example: ok
+    Product:
+      type: object
+      required: [id, name, price, imageUrl, stock]
+      properties:
+        id:
+          type: string
+          example: prod-1
+        name:
+          type: string
+          example: Cloud Run Developer Hoodie
+        price:
+          type: number
+          description: Price in Naira (NGN)
+          example: 35000
+        imageUrl:
+          type: string
+          example: /images/cloud-run-hoodie.jpg
+        stock:
+          type: integer
+          example: 25

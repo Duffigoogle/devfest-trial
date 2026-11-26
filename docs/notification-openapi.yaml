@@ -1,0 +1,60 @@
+openapi: 3.0.3
+info:
+  title: CloudMart Notification Service API
+  version: 1.0.0
+  description: >-
+    Cloud Run-compatible notification service that receives Google Cloud Pub/Sub
+    push messages for "order.placed" events at POST /pubsub.
+servers:
+  - url: http://localhost:8085
+    description: Local development
+  - url: http://notification:8085
+    description: Kubernetes / Cloud Run service
+paths:
+  /healthz:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: Service is healthy
+  /pubsub:
+    post:
+      summary: Receive a Google Cloud Pub/Sub push message containing an "order.placed" event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PubSubPushRequest'
+      responses:
+        '204':
+          description: Event processed and confirmation logged
+        '400':
+          description: Bad Pub/Sub message or invalid order.placed payload
+  /notifications:
+    get:
+      summary: List all sent notifications
+      responses:
+        '200':
+          description: Array of dispatched notifications
+components:
+  schemas:
+    PubSubPushRequest:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: object
+          required: [data]
+          properties:
+            data:
+              type: string
+              format: byte
+              description: Base64-encoded JSON of the order.placed event
+            messageId:
+              type: string
+            publishTime:
+              type: string
+              format: date-time
+        subscription:
+          type: string

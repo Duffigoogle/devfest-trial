@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: cloudmart
+
+resources:
+  - namespace.yaml
+  - product.yaml
+  - cart.yaml
+  - payment.yaml
+  - order.yaml
+  - frontend.yaml
+
+# Set your Artifact Registry / Container Registry path and image tag in one place:
+# e.g. replace "REGION-docker.pkg.dev/PROJECT_ID/cloudmart" and "v1.0.0"
+images:
+  - name: cloudmart/frontend
+    newName: REGION-docker.pkg.dev/PROJECT_ID/cloudmart/frontend
+    newTag: v1.0.0
+  - name: cloudmart/product
+    newName: REGION-docker.pkg.dev/PROJECT_ID/cloudmart/product
+    newTag: v1.0.0
+  - name: cloudmart/cart
+    newName: REGION-docker.pkg.dev/PROJECT_ID/cloudmart/cart
+    newTag: v1.0.0
+  - name: cloudmart/order
+    newName: REGION-docker.pkg.dev/PROJECT_ID/cloudmart/order
+    newTag: v1.0.0
+  - name: cloudmart/payment
+    newName: REGION-docker.pkg.dev/PROJECT_ID/cloudmart/payment
+    newTag: v1.0.0

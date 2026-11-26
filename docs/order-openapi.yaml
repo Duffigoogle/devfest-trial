@@ -1,0 +1,124 @@
+openapi: 3.0.3
+info:
+  title: CloudMart Order Service API
+  version: 1.0.0
+  description: >-
+    Owns order lifecycle. Reads cart from CART_URL, fetches prices from PRODUCT_URL,
+    charges total via PAYMENT_URL, clears the cart, and publishes "order.placed"
+    to Google Cloud Pub/Sub (PUBSUB_TOPIC in GOOGLE_CLOUD_PROJECT).
+servers:
+  - url: http://localhost:8083
+    description: Local development
+  - url: http://order:8083
+    description: Kubernetes internal service
+paths:
+  /healthz:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: Service is healthy
+  /orders:
+    get:
+      summary: List all orders
+      responses:
+        '200':
+          description: Array of orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+    post:
+      summary: Place a new order and publish the "order.placed" event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequest'
+      responses:
+        '201':
+          description: Order placed and paid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Invalid payload or empty cart
+        '402':
+          description: Payment declined
+  /orders/{id}:
+    get:
+      summary: Get order by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: Order not found
+components:
+  schemas:
+    OrderItem:
+      type: object
+      required: [productId, name, quantity, price]
+      properties:
+        productId:
+          type: string
+        name:
+          type: string
+        quantity:
+          type: integer
+        price:
+          type: number
+    CreateOrderRequest:
+      type: object
+      required: [cartId, customerEmail]
+      properties:
+        cartId:
+          type: string
+          example: cart-100
+        customerEmail:
+          type: string
+          format: email
+          example: alex@example.com
+    Order:
+      type: object
+      required: [orderId, cartId, items, total, customerEmail, status, paymentId, createdAt]
+      properties:
+        orderId:
+          type: string
+          example: ord-m3z1x-a1b2
+        cartId:
+          type: string
+          example: cart-100
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        total:
+          type: number
+          example: 70000
+        customerEmail:
+          type: string
+          format: email
+          example: alex@example.com
+        status:
+          type: string
+          example: placed
+        paymentId:
+          type: string
+          example: pay-98765
+        createdAt:
+          type: string
+          format: date-time
